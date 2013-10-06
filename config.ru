@@ -1,7 +1,7 @@
 ###############################################################################
 # Enable running of config.ru from a arbitrary directory: 
 ###############################################################################
-require File.dirname(__FILE__) + '/HyLine'
+require File.dirname(__FILE__) + '/HyPoints'
 
 ###############################################################################
 # Enables stdout to be redirected to heroku logging infrastructure:
