@@ -283,21 +283,20 @@ class TheApp < Sinatra::Base
     bar "bpm", bg_a
   end
 
-
   #  http://pacific-ridge-7904.herokuapp.com/plot/history.svg
   graph "history", :prefix => '/plot' do
-    who = params['From']
-    flavor = params['flavor']
+    puts who = params['From'].to_s
+    puts '  (' + who.class + ')'
+    puts flavor = params['flavor'] 
 
-    cursor = DB['checkins'].find({ flavor => {'$exists' => true}})
+    cursor = DB['checkins'].find({ flavor => {'$exists' => true}, 
+                                   'ID' => params['From'] })
     bg_a = Array.new
     cursor.each{ |d|
       bg_a.push(d[flavor])
     }
     bar flavor, bg_a
   end
-
-
 
 
   #############################################################################
@@ -695,7 +694,8 @@ class TheApp < Sinatra::Base
   get /\/c\/plot[:,\s]*(?<flavor>\w{3,333})[:,\s]*/ix do 
     flavor = params[:captures][0]
     link = SITE + 'plot/history.svg'
-    link += '?From='+params['From']
+    link += '?' 
+    link += 'From='+params['From']
     link += '&'
     link += 'flavor='+flavor.downcase
 

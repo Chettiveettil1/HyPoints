@@ -1,4 +1,4 @@
 #!/bin/bash
 
-curl http://pacific-ridge-7904.herokuapp.com/hourly_ping
+curl http://frozen-coast-6683.herokuapp.com/hourly_ping
 

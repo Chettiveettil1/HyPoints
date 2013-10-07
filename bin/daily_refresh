@@ -1,4 +1,4 @@
 #!/bin/bash
 
-curl http://pacific-ridge-7904.herokuapp.com/daily_refresh
+curl http://frozen-coast-6683.herokuapp.com/daily_refresh
 
