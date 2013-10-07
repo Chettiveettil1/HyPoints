@@ -62,6 +62,10 @@ require 'pony'
 # and so I configure that as well.  Neo4j is included for relationship 
 # tracking and management.  
 #
+# Conventions: 
+#   In the params[] hash, capitalized params are auto- or Twilio- generated
+#   Lower-case params are ones that I put into the params[] hash via this code
+#
 ###############################################################################
 
 class TheApp < Sinatra::Base
@@ -1123,7 +1127,7 @@ class TheApp < Sinatra::Base
     begin
       pulse_f = Float(params[:captures][0])
 
-      handle_checkin(pulse_f, "bpm")
+      handle_checkin(pulse_f, "pulse")
 
     rescue Exception => e
       reply_via_SMS('SMS not quite right for a pulse checkin:'+params['Body'])
