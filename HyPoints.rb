@@ -17,6 +17,7 @@ require 'rubygems' if RUBY_VERSION < '1.9'
 
 require 'sinatra/base'
  require 'erb'
+
 require 'sinatra/graph'
 
 require 'net/http'
@@ -275,6 +276,20 @@ class TheApp < Sinatra::Base
       bg_a.push(d['bpm'])
     }
     bar "bpm", bg_a
+  end
+
+
+  #  http://pacific-ridge-7904.herokuapp.com/plot/history.svg
+  graph "history", :prefix => '/plot' do
+    who = params['From']
+    flavor = params['Flavor']
+
+    cursor = DB['checkins'].find({flavor => {'$exists' => true}})
+    bg_a = Array.new
+    cursor.each{ |d|
+      bg_a.push(d[flavor])
+    }
+    bar flavor, bg_a
   end
 
 
@@ -670,6 +685,15 @@ class TheApp < Sinatra::Base
   get '/c/hello*' do
     puts "GREETINGS ROUTE"
     send_SMS_to( params['From'], 'Hello, and Welcome!' )
+  end #do get
+
+  get /\/c\/plot[:,\s]*(?<flavor>\w{3,333})[:,\s]*/ix do 
+    flavor = params[:captures][0]
+    link = SITE+='plot/history.svg'
+    link += '?flavor='+flavor.downcase
+
+    msg = "Link to your plot: " + link
+    send_SMS_to( params['From'], msg )
   end #do get
 
   #############################################################################
