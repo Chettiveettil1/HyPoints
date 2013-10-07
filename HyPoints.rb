@@ -289,8 +289,7 @@ class TheApp < Sinatra::Base
     who = params['From']
     flavor = params['flavor']
 
-    cursor = DB['checkins'].find({  # 'ID' => params['From'], 
-                                   flavor => {'$exists' => true}})
+    cursor = DB['checkins'].find({ flavor => {'$exists' => true}})
     bg_a = Array.new
     cursor.each{ |d|
       bg_a.push(d[flavor])
@@ -2276,7 +2275,7 @@ class TheApp < Sinatra::Base
         }
         DB['people'].insert(doc)
 
-        msg = 'Welcome to the experimental DM Type I tracking app!'
+        msg = 'Welcome to the experimental tracking app!'
         msg += ' (All data sent or received is public domain.)'
         reply_via_SMS( msg )
 
