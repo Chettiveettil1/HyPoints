@@ -289,7 +289,8 @@ class TheApp < Sinatra::Base
     who = params['From']
     flavor = params['flavor']
 
-    cursor = DB['checkins'].find({flavor => {'$exists' => true}})
+    cursor = DB['checkins'].find({  # 'ID' => params['From'], 
+                                   flavor => {'$exists' => true}})
     bg_a = Array.new
     cursor.each{ |d|
       bg_a.push(d[flavor])
@@ -695,6 +696,8 @@ class TheApp < Sinatra::Base
   get /\/c\/plot[:,\s]*(?<flavor>\w{3,333})[:,\s]*/ix do 
     flavor = params[:captures][0]
     link = SITE+='plot/history.svg'
+    link += '?From='+params['From']
+    link += '&'
     link += '?flavor='+flavor.downcase
 
     msg = "Link to your plot: " + link
