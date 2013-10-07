@@ -286,7 +286,7 @@ class TheApp < Sinatra::Base
   #  http://pacific-ridge-7904.herokuapp.com/plot/history.svg
   graph "history", :prefix => '/plot' do
     puts who = params['From'].to_s
-    puts '  (' + who.class + ')'
+    puts '  (' + who.class.to_s + ')'
     puts flavor = params['flavor'] 
 
     cursor = DB['checkins'].find({ flavor => {'$exists' => true}, 
