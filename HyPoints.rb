@@ -421,8 +421,8 @@ class TheApp < Sinatra::Base
     response = Twilio::TwiML::Response.new do |r|
       r.Pause :length => 1
       r.Say 'Hi!', :voice => 'woman'
-      r.Say 'The last'
-      r.Say @flavor_text 
+      r.Say 'The last', :voice => 'woman'
+      r.Say @flavor_text, :voice => 'woman'
       r.Say 'checkin was ', :voice => 'woman'
       r.Say @number_as_string, :voice => 'woman'
       r.Say @time_of_last_checkin, :voice => 'woman'
@@ -694,7 +694,7 @@ class TheApp < Sinatra::Base
     send_SMS_to( params['From'], 'Hello, and Welcome!' )
   end #do get
 
-  get /\/c\/plot[:,\s]*(?<flavor>\w{3,333})[:,\s]*/ix do 
+  get /\/c\/plot[:,\s]*(?<flavor>\w+)[:,\s]*/ix do 
     flavor = params[:captures][0]
     link = SITE + 'plot/history.svg'
     link += '?' 
