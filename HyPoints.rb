@@ -413,6 +413,7 @@ class TheApp < Sinatra::Base
       @time_of_last_checkin = 'texted in.'
     else
       @number_as_string = last_level['value_s']
+      @flavor_text = last_level['flavor']
       interval_in_hours = (Time.now.to_f - last_level['utc']) / ONE_HOUR
       @time_of_last_checkin = speakable_hour_interval_for( interval_in_hours )
     end #if
@@ -420,7 +421,9 @@ class TheApp < Sinatra::Base
     response = Twilio::TwiML::Response.new do |r|
       r.Pause :length => 1
       r.Say 'Hi!', :voice => 'woman'
-      r.Say 'The last checkin was ', :voice => 'woman'
+      r.Say 'The last'
+      r.Say @flavor_text 
+      r.Say 'checkin was ', :voice => 'woman'
       r.Say @number_as_string, :voice => 'woman'
       r.Say @time_of_last_checkin, :voice => 'woman'
       r.Pause :length => 1
@@ -1716,6 +1719,7 @@ class TheApp < Sinatra::Base
 
       doc = { 'ID' => params['From'],
               flavor_text_s => value_f,
+              'flavor' => flavor_text_s, 
               'value_s' => value_s, 
               'pts' => pts,
               'utc' => @now_f
