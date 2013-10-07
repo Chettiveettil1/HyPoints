@@ -695,7 +695,7 @@ class TheApp < Sinatra::Base
 
   get /\/c\/plot[:,\s]*(?<flavor>\w{3,333})[:,\s]*/ix do 
     flavor = params[:captures][0]
-    link = SITE+='plot/history.svg'
+    link = SITE + 'plot/history.svg'
     link += '?From='+params['From']
     link += '&'
     link += '?flavor='+flavor.downcase
