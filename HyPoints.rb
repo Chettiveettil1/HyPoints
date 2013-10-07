@@ -1,5 +1,6 @@
 # TODO List:
 
+# [--] Consider ID key to int ne: String ('+17244489427' --> 17244489427)
 # [--] Enable and Test broadcast to all caregivers
 # [--] Enable and Test broadcast to all patients
 # [--] Enable and Test broadcast to everyone
@@ -418,17 +419,34 @@ class TheApp < Sinatra::Base
       @time_of_last_checkin = speakable_hour_interval_for( interval_in_hours )
     end #if
 
+    speech_text = 'Hi! The last checkin for'
+    speech_text += ' ' 
+    speech_text += @flavor_text 
+    speech_text += ' ' 
+    speech_text += 'was' 
+    speech_text += ' ' 
+    speech_text += @number_as_string
+    speech_text += ' ' 
+    speech_text += @time_of_last_checkin
+   
     response = Twilio::TwiML::Response.new do |r|
       r.Pause :length => 1
-      r.Say 'Hi!', :voice => 'woman'
-      r.Say 'The last', :voice => 'woman'
-      r.Say @flavor_text, :voice => 'woman'
-      r.Say 'checkin was ', :voice => 'woman'
-      r.Say @number_as_string, :voice => 'woman'
-      r.Say @time_of_last_checkin, :voice => 'woman'
+      r.Say speech_text, :voice => 'woman'
       r.Pause :length => 1
       r.Hangup
     end #do response
+
+#    response = Twilio::TwiML::Response.new do |r|
+#      r.Pause :length => 1
+#      r.Say 'Hi!', :voice => 'woman'
+#      r.Say 'The last checkin for', :voice => 'woman'
+#      r.Say @flavor_text, :voice => 'woman'
+#      r.Say 'was ', :voice => 'woman'
+#      r.Say @number_as_string, :voice => 'woman'
+#      r.Say @time_of_last_checkin, :voice => 'woman'
+#      r.Pause :length => 1
+#      r.Hangup
+#    end #do response
 
     response.text do |format|
       format.xml { render :xml => response.text }
