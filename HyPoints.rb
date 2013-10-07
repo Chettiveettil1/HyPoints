@@ -695,9 +695,9 @@ class TheApp < Sinatra::Base
     flavor = params[:captures][0]
     link = SITE + 'plot/history.svg'
     link += '?' 
-    link += 'From='+params['From']
+    link += 'From=' + CGI::escape( params['From'] )
     link += '&'
-    link += 'flavor='+flavor.downcase
+    link += 'flavor=' + CGI::escape( flavor.downcase )
 
     msg = "Link to your plot: " + link
     send_SMS_to( params['From'], msg )
