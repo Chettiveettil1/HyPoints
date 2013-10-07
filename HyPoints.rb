@@ -92,6 +92,7 @@ class TheApp < Sinatra::Base
       PTS_BONUS_FOR_LABELS = 5
       PTS_BONUS_FOR_TIMING = 10
 
+      DEFAULT_POINTS = 2
       DEFAULT_SCORE = 0 
       DEFAULT_GOAL = 500.0
       DEFAULT_PANIC = 24
@@ -1708,6 +1709,7 @@ class TheApp < Sinatra::Base
     def handle_checkin(value_f, flavor_text_s)
     puts where = 'handle_checkin'
     begin
+      pts = DEFAULT_POINTS
       value_s = value_f.to_s
 
       doc = { 'ID' => params['From'],
