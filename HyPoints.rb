@@ -412,7 +412,7 @@ class TheApp < Sinatra::Base
       @number_as_string = 'never '
       @time_of_last_checkin = 'texted in.'
     else
-      @number_as_string = last_level['bpm']
+      @number_as_string = last_level['value_s']
       interval_in_hours = (Time.now.to_f - last_level['utc']) / ONE_HOUR
       @time_of_last_checkin = speakable_hour_interval_for( interval_in_hours )
     end #if
@@ -1278,6 +1278,18 @@ class TheApp < Sinatra::Base
   # them we could not understand their text message.  
   # 
   #############################################################################
+
+  # Trap+log a string key + float or digit checkins we didn't anticipate . . . 
+
+  get /\/c\/(?<flavor>\D+)[:,\s]*(?<value>\d*\.?\d+)/ix do
+    flavor_s = params[:captures][0]
+    value_f = Float( params[:captures][1] )
+
+    handle_checkin(value_f, flavor_s)
+  end #do get
+
+
+
   get '/c/*' do |text|
     puts 'SMS CATCH-ALL TRAPPING ROUTE'
     reply_via_SMS('Sorry :/ I could not understand that. Maybe check your card or text the word HELP? Also for some commands the exact #of digits is the key')
@@ -1693,19 +1705,20 @@ class TheApp < Sinatra::Base
     ###########################################################################
     # Helper: Lantus-checkin database interactions
     ###########################################################################
-    def handle_checkin(value_f, units_text_s)
+    def handle_checkin(value_f, flavor_text_s)
     puts where = 'handle_checkin'
     begin
-      pts = 7.0
+      value_s = value_f.to_s
 
       doc = { 'ID' => params['From'],
-              units_text_s => value_f,
+              flavor_text_s => value_f,
+              'value_s' => value_s, 
               'pts' => pts,
               'utc' => @now_f
             }
       DB['checkins'].insert(doc)
 
-      msg = "Got your checkin! Logging %.1f %s" % [value_f, units_text_s]
+      msg = "Got your checkin! Logging %.1f %s" % [value_f, flavor_text_s]
 
     rescue Exception => e
       msg = 'Unable to log checkin'
