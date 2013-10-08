@@ -1,4 +1,3 @@
 #!/bin/bash
-
 curl http://frozen-coast-6683.herokuapp.com/ten_minute_heartbeat
 
