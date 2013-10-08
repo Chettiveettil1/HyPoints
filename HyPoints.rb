@@ -1,4 +1,8 @@
 # TODO List:
+#
+# [--] Text in pulse rate and record it into the NoSQL database
+# [--] Be able to call back and see most recent checkin
+# [--] Possibly be able to graph the data historically
 
 # [--] Consider ID key to int ne: String ('+17244489427' --> 17244489427)
 # [--] Enable and Test broadcast to all caregivers
@@ -410,6 +414,7 @@ class TheApp < Sinatra::Base
     last_level = last_checkin_for(patient_ph_num)
 
     if (last_level == nil)
+      @flavor_text = 'you'
       @number_as_string = 'never '
       @time_of_last_checkin = 'texted in.'
     else
